@@ -1,0 +1,141 @@
+<div class="product__details">
+  <div class="product__heading">
+    <div data-price-wrapper>
+
+      <span data-product-price class="meta">
+        {% if is_placeholder %}
+          {{ 'homepage.onboarding.product_price' | t }}
+        {% else %}
+          {{ current_variant.price | money }}
+        {% endif %}
+      </span>
+
+      {% if product.compare_at_price_max > product.price %}
+        <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
+        <s class="meta" data-compare-price>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            {{ current_variant.compare_at_price | money }}
+          {% endif %}
+        </s>
+      {% endif %}
+    </div>
+
+    <h1 class="product__title type-heading-1">
+      {% if is_placeholder %}
+        {{ 'homepage.onboarding.product_title' | t }}
+      {% else %}
+        {{ product.title }}
+      {% endif %}
+    </h1>
+    {% if section.settings.show_vendor %}
+      <p class="product__vendor">{{ product.vendor }}</p>
+    {% endif %}
+  </div>
+
+
+  <div>
+    {% if product != blank %}
+      {% form 'product', product %}
+      <div class="product__sticky-element" data-sticky-element>
+        <div class="product__sticky-element-heading">
+          <a href="/" class="logo-image color-inherit">
+            {{ shop.name }}
+          </a>
+        </div>
+        <div class="product__sticky-right">
+          <img class="product__sticky-image" src="{{ product.images[0] | img_url: "thumbnail" }}" />
+          <button
+            {% if product.variants.size != 1 %}
+              data-has-variants
+            {% endif %}
+            type="submit"
+            name="add"
+            class="product__sticky-button"
+          >
+            {{ product.price | money }} <span>|</span> Buy Now
+          </button>
+        </div>
+      </div>
+
+      {% unless product.has_only_default_variant %}
+        {% for option in product.options_with_values %}
+          <div class="selector-wrapper js mb3">
+            <label for="SingleOptionSelector-{{ forloop.index0 }}" class="dib mb2">
+              {{ option.name }}
+            </label>
+
+            <div class="select-wrapper">
+              <select
+                id="SingleOptionSelector-{{ forloop.index0 }}"
+                data-single-option-selector
+                data-index="option{{ option.position }}"
+                class="input-reset input w-100"
+              >
+                {% for value in option.values %}
+                  <option
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}selected="selected"{% endif %}>
+                      {{ value }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        {% endfor %}
+      {% endunless %}
+
+      <select name="id" class="no-js" data-product-select>
+        {% for variant in product.variants %}
+          <option
+            {% if variant == current_variant %}selected="selected"{% endif %}
+            {% unless variant.available %}disabled="disabled"{% endunless %}
+            value="{{ variant.id }}">
+              {{ variant.title }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <div class="mb3">
+        <label for="Quantity" class="dib mb2">{{ 'products.product.quantity' | t }}</label>
+        <input type="number" id="Quantity" name="quantity" value="1" min="1" class="input-reset input w-100">
+      </div>
+
+      <button
+        type="submit"
+        name="add"
+        class="bttn bttn--full {% if section.settings.enable_payment_button %}bttn--secondary{% endif %} "
+        data-add-to-cart
+        {% unless current_variant.available %}disabled="disabled"{% endunless %}>
+          <span class="w-100" data-add-to-cart-text>
+            {% if current_variant.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </span>
+      </button>
+      {% if section.settings.enable_payment_button and current_variant.available %}
+        {{ form | payment_button }}
+      {% endif %}
+      {% endform %}
+    {% endif %}
+  </div>
+
+  <div class="product__description type-body-regular rte">
+    {% if is_placeholder %}
+      {{ 'homepage.onboarding.product_description' | t }}
+    {% else %}
+      {{ product.description }}
+    {% endif %}
+  </div>
+
+  {% if section.settings.show_share_buttons %}
+    {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+  {% endif %}
+
+  {% unless product == empty %}
+    <script type="application/json" data-product-json>
+      {{ product | json }}
+    </script>
+  {% endunless %}
+</div>

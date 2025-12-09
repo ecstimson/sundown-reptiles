@@ -1,0 +1,146 @@
+<section class="section cart-template">
+
+  <h1 class="type-heading-1 mb3">{{ 'cart.general.title' | t }}</h1>
+  {% if cart.item_count > 0 %}
+
+    <form action="/cart" method="post" novalidate>
+
+      {% for item in cart.items %}
+        <div class="cart-template__item contrast">
+
+          <div class="cart-template__image">
+            {% if item.image != blank %}
+              <a href="{{ item.url | within: collections.all }}">
+                {{ item | img_url: '500x500' | img_tag: item.title }}
+              </a>
+            {% endif %}
+          </div>
+
+          <div class="cart-template__text">
+
+            <div class="cart-template__details">
+
+              <a class="mb1 db" href="{{ item.url }}">{{ item.product.title }}</a>
+
+              {% unless item.product.has_only_default_variant %}
+                <p class="type-body-small mt0 mb1">{{ item.variant.title }}</p>
+              {% endunless %}
+
+              <div class="meta">
+
+                {% if item.original_line_price > item.final_line_price %}
+                  <s>{{ item.original_price | money }}</s>
+                {% endif %}
+                {{ item.final_price | money }}
+                {% if item.line_level_discount_allocations.size > 0 %}
+                  <ul class="cart__line-item-discounts">
+                  {% for discount_allocation in item.line_level_discount_allocations %}
+                    <li>{{ discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money }})</li>
+                  {% endfor %}
+                  </ul>
+                {% endif %}
+
+              </div>
+
+              {%- assign property_size = item.properties | size -%}
+
+              {% if property_size > 0 %}
+                {% for p in item.properties %}
+                  {% unless p.last == blank %}
+                  {{ p.first }}:
+
+                  {% if p.last contains '/uploads/' %}
+                    <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                  {% else %}
+                    {{ p.last }}
+                  {% endif %}
+
+                  {% endunless %}
+                {% endfor %}
+              {% endif %}
+            </div>
+
+            <div class="cart-template__quantity" style="max-width: 100px;">
+            <input type="number"
+                  class="input-reset input"
+                  name="updates[]"
+                  id="updates_{{ item.key }}"
+                  value="{{ item.quantity }}"
+                  min="0"
+                  aria-label="{{ 'cart.general.item_quantity' | t }}">
+            </div>
+
+            <div class="cart-template__line-price type-body-large">
+              {% if item.original_line_price > item.final_line_price %}
+                <s class="meta">{{ item.original_line_price | money }}</s><br/>
+              {% endif %}
+              {{ item.final_line_price | money }}
+            </div>
+
+            <div class="cart-template__remove">
+              <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                <small>{{ 'cart.general.remove' | t }}</small>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      {% endfor %}
+
+
+      <div class="cart-template__footer">
+        <div class="cart-template__footer-details">
+
+          {% comment %} Cart level discounts {% endcomment %}
+          {%- if cart.cart_level_discount_applications != blank -%}
+          <ul class="cart__discounts">
+            {%- for discount_application in cart.cart_level_discount_applications -%}
+              <li>{{ discount_application.title }} (-{{ discount_application.total_allocated_amount | money }})</li>
+            {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          <p class="meta mv0">{{ 'cart.general.subtotal' | t }}</p>
+          {% comment %} Final cart total {% endcomment %}
+          <p class="type-body-extra-large mt1">{{ cart.total_price | money }}</p>
+
+          <p class="type-body-regular">{{ 'cart.general.shipping_at_checkout' | t }}</p>
+
+          {% if settings.cart_notes_enable %}
+            <div class="cart__special-instruction">
+              <label for="CartSpecialInstructions" class="db mt4 mb2">{{ 'cart.general.note' | t }}</label>
+              <textarea class="input" name="note" id="CartSpecialInstructions">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="cart-template__footer-actions">
+          <input type="submit" name="update" class="bttn bttn--secondary" value="{{ 'cart.general.update' | t }}">
+          <input type="submit" name="checkout" class="bttn" value="{{ 'cart.general.checkout' | t }}">
+        </div>
+
+      </div>
+    </form>
+  {% else %}
+
+    {% comment %}
+    Cart empty state
+    {% endcomment %}
+    <div class="supports-cookies">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <p>{{ 'cart.general.continue_browsing_html' | t }}</p>
+    </div>
+
+    {% comment %}
+    Cart no cookies state
+    ---------------------
+    Browser cookies are required to use the cart. If cookies aren't enabled in the
+    browser a message is displayed prompting the user to enable them.
+    {% endcomment %}
+    <div class="supports-no-cookies">
+      <p>{{ 'cart.general.cookies_required' | t }}</p>
+    </div>
+  {% endif %}
+
+</section>

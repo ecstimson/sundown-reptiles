@@ -1,0 +1,166 @@
+<div
+  data-section-id="{{ section.id }}"
+  data-section-type="product"
+  data-enable-history-state="true"
+  {%- if template == 'product' -%}
+    data-trigger-recent="true"
+  {%- endif -%}
+>
+  <section class="bb b--default pb4">
+    {%- comment -%}Check if product is in a care guide collection{%- endcomment -%}
+    {%- assign is_care_guide = false -%}
+    {%- for collection in product.collections -%}
+      {%- if collection.handle contains 'care-guide' -%}
+        {%- assign is_care_guide = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div class="product{% if is_care_guide %} product--care-guide{% endif %}">
+
+      {%- if is_care_guide -%}
+        {%- comment -%}Care guide layout: details first, then image{%- endcomment -%}
+        <div class="product__details-container">
+          {% include 'product-details' with product: product %}
+        </div>
+
+        <div class="product__image-container">
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
+          {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+          <div id="product-{{ section.id }}" class="product__primary-image-wrapper">
+
+            <a href="#" class="product__zoom-arrow">
+              {% include 'icon-plus' %}
+            </a>
+
+            {% for image in product.images %}
+              {% capture wrapper_class %}
+                {%- unless featured_image == image -%}
+                  hide
+                {%- endunless -%}
+              {% endcapture %}
+
+              <a class="chocolat-image" href="{{ image | img_url: 'master' }}">
+              {% include 'responsive-image' with
+                image: image,
+                max_width: 700,
+                max_height: 800,
+                image_attributes: "data-product-featured-image",
+                wrapper_class: wrapper_class,
+                wrapper_attributes: "data-product-image-wrapper",
+              %}
+              </a>
+            {% endfor %}
+
+          </div>
+
+          {% if product.images.size > 1 %}
+            <ul class="product_thumbnail-list">
+              {% for image in product.images %}
+                <li class='product_thumbnail'>
+                  <a href="{{ image.src | img_url: '480x480' }}" data-thumbnail-id="{{ image.id }}" data-product-single-thumbnail>
+                    <img class="product-single__thumbnail-image" src="{{ image.src | img_url: '160x160' }}" alt="{{ image.alt | escape }}">
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+        </div>
+      {%- else -%}
+        {%- comment -%}Standard product layout: image first, then details{%- endcomment -%}
+        <div class="product__image-container">
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
+          {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+
+          <div id="product-{{ section.id }}" class="product__primary-image-wrapper">
+
+            <a href="#" class="product__zoom-arrow">
+              {% include 'icon-plus' %}
+            </a>
+
+            {% for image in product.images %}
+              {% capture wrapper_class %}
+                {%- unless featured_image == image -%}
+                  hide
+                {%- endunless -%}
+              {% endcapture %}
+
+              <a class="chocolat-image" href="{{ image | img_url: 'master' }}">
+              {% include 'responsive-image' with
+                image: image,
+                max_width: 700,
+                max_height: 800,
+                image_attributes: "data-product-featured-image",
+                wrapper_class: wrapper_class,
+                wrapper_attributes: "data-product-image-wrapper",
+              %}
+              </a>
+            {% endfor %}
+
+          </div>
+
+          {% if product.images.size > 1 %}
+            <ul class="product_thumbnail-list">
+              {% for image in product.images %}
+                <li class='product_thumbnail'>
+                  <a href="{{ image.src | img_url: '480x480' }}" data-thumbnail-id="{{ image.id }}" data-product-single-thumbnail>
+                    <img class="product-single__thumbnail-image" src="{{ image.src | img_url: '160x160' }}" alt="{{ image.alt | escape }}">
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+        </div>
+
+        <div class="product__details-container">
+          {% include 'product-details' with product: product %}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </section>
+</div>
+
+<style>
+  .chocolat-wrapper .chocolat-right {
+    background: url({{ "arrow-right.svg" | asset_url }}) 50% 50% no-repeat;
+  }
+
+  .chocolat-wrapper .chocolat-left {
+    background: url({{ "arrow-left.svg" | asset_url }}) 50% 50% no-repeat;
+  }
+
+  .chocolat-wrapper .chocolat-close {
+    background: url({{ "close.svg" | asset_url }}) 50% 50% no-repeat;
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Product pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show vendor",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_payment_button",
+        "label": "Show dynamic checkout button",
+        "info": "Lets customers check out directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

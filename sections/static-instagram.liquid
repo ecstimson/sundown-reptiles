@@ -1,0 +1,72 @@
+{%- if section.settings.enabled == true -%}
+  {% include 'section-instagram' with type: 'static-instagram' %}
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Instagram",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enabled",
+        "label": "Enable",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "link_text",
+        "label": "Link text",
+        "default": "Follow us"
+      },
+      {
+        "type": "select",
+        "id": "alignment",
+        "label": "Heading alignment",
+        "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "above", "label": "Center" },
+          { "value": "right", "label": "Right" }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "instagram_token",
+        "label": "Instagram token"
+      },
+      {
+        "type": "range",
+        "id": "rows",
+        "label": "Rows",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "per_row",
+        "label": "Images per row",
+        "min": 2,
+        "max": 4,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "header",
+        "content": "Section style"
+      },
+      {
+        "type": "checkbox",
+        "id": "outline",
+        "label": "Outline section",
+        "default": false
+      }
+    ]
+  }
+{% endschema %}

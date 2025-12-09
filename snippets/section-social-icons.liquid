@@ -1,0 +1,28 @@
+<section
+  data-section-id="{{ section.id }}"
+  class="section social-icons"
+>
+  <div class="ph4 pv5 pv6-ns tc {% include 'section-style' %}">
+    {% if section.settings.title %}
+      <h2 class="type-heading-1 ma0 mb3">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% assign accounts = 'pinterest,instagram,facebook,tumblr,twitter,vimeo,youtube' | split: ',' %}
+
+    <div class="social-icons__wrapper">
+      {% for account in accounts %}
+        {%- capture settings_id -%}social_{{ account }}_link{%- endcapture -%}
+        {%- capture local_id -%}{{ account }}_enabled{%- endcapture -%}
+        {%- capture icon_id -%}icon-{{ account }}{%- endcapture -%}
+
+        {% if settings[settings_id] != blank and section.settings[local_id] == true %}
+          <a href="{{ settings[settings_id] }}">
+            <div class="social-icons__icon">
+              {% include icon_id %}
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

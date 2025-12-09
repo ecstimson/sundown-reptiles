@@ -1,0 +1,42 @@
+<div class="pagination">
+  <p>{{ 'general.pagination.viewing' | t: of: of, total: total }} {{ type | t }}</p>
+  <ul class="list ma0 pa0">
+
+    {%- if paginate.previous != blank -%}
+      <li class="pagination__item">
+        <a href="{{ paginate.previous.url }}">{{ paginate.previous.title }}</a>
+      </li>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- capture li_classes -%}
+        {%- if part.title == paginate.current_page -%}
+          pagination__item pagination__item--active
+        {%- elsif part.title == "&hellip;" -%}
+          pagination__ellip
+        {%- else -%}
+          pagination__item
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <li class="{{ li_classes }}">
+        {%- if part.is_link == true -%}
+          <a href="{{ part.url }}" >{{ part.title }}</a>
+        {%- else -%}
+          {%- if part.title == "&hellip;" -%}
+            <span>{{ part.title }}</span>
+          {%- else -%}
+            <span>{{ part.title }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      
+      </li>
+    {%- endfor -%}
+
+    {%- if paginate.next != blank -%}
+      <li class="pagination__item">
+        <a href="{{ paginate.next.url }}">{{ paginate.next.title }}</a>
+      </li>
+    {%- endif -%}
+  </ul>
+</div>

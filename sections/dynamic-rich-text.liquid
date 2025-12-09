@@ -1,0 +1,45 @@
+<section class="section tc mv6">
+
+  {%- if section.settings.title != blank -%}
+    <h2 class="type-heading-1">{{ section.settings.title | escape }}</h2>
+  {%- endif -%}
+
+  {%- if section.settings.text != blank -%}
+    <div class="type-body-large rte center measure-wide">
+      {{ section.settings.text }}
+    </div>
+  {%- endif -%}
+
+  {%- if section.settings.link -%}
+    {%- if section.settings.button_text -%}
+      <div class="rte center measure-wide">
+        <a href="{{ section.settings.link }}">{{ section.settings.button_text }}</a>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+  {
+    "name": "Rich text",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default":"This is the Rich text section"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default": "<p>Use this text area to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+      }
+    ],
+    "presets": [{
+        "name": "Rich text",
+        "category": "Text"
+    }]
+  }
+{% endschema %}

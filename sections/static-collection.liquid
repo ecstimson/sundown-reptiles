@@ -1,0 +1,123 @@
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="static-collection"
+  class="collection"
+>
+
+  <script type="application/json" data-tags>
+    {% if collection.all_tags.size > 0 %}
+      [
+        {%- for tag in collection.all_tags -%}
+          "{{ tag }}"
+          {%- if forloop.last == false -%}
+            ,
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    {% else %}
+      []
+    {% endif %}
+  </script>
+
+{% assign paginate_by = 12 %}
+{% if template contains 'view-12' %}
+  {% assign paginate_by = '12' %}
+{% elsif template contains 'view-24' %}
+  {% assign paginate_by = '24' %}
+{% elsif template contains 'view-36' %}
+  {% assign paginate_by = '36' %}
+{% endif %}
+
+{% paginate collection.products by paginate_by %}
+
+  <header role="banner" class="section">
+    <div class="section--standard flex flex-wrap">
+      <div
+        class="
+          collection__details
+          {% if section.settings.show_collection_image and collection.image == blank %}collection__details--no-image{% endif %}
+        "
+      >
+        <p class="type-heading-meta meta mt0 mb3">
+          {{ 'collections.general.name' | t }}
+        </p>
+        <h1 class="type-heading-1 mv3 ma0">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="type-body-regular rte measure">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_collection_image and collection.image != blank %}
+        <div
+          class="lazyload collection__image"
+          data-bgset="{% include 'responsive-bg-image', image: collection.image %}"
+          role="img"
+          aria-label="{{ collection.image.alt }}"
+        ></div>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="collection__container">
+    {%- comment -%}Mount React{%- endcomment -%}
+    <div id="filters"></div>
+
+    <div class="collection__products">
+      {% for product in collection.products %}
+        <div class="w-50 ph1 w-third-m ph2-ns w-25-l mb4">
+          {% include 'product-tile', product: product %}
+        </div>
+
+      {% else %}
+        {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+          {% for i in (1..8) %}
+            <a href="#">
+              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+            </a>
+
+            <p>
+              <a href="#">{{ 'homepage.onboarding.product_title' | t }}</a>
+            </p>
+
+            <p>
+              {{ 1999 | money }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p class="db tc w-100 mv6">{{ 'collections.general.no_matches' | t }}</p>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+  </div>
+
+
+  <div class="section">
+    <hr class="mv3 b--solid b--default bb" style="border-top: none;" />
+    {% if paginate.pages > 1 %}
+      {% include 'pagination' with type: 'general.pagination.products', total: paginate.items, of: paginate.page_size %}
+    {% else %}
+      {% include 'pagination' with type: 'general.pagination.products', total: collection.products_count, of: collection.products_count %}
+    {% endif %}
+  </div>
+
+
+{% endpaginate %}
+</section>
+
+{% schema %}
+  {
+    "name": "Collection pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "label": "Show collection image",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

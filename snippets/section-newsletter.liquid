@@ -1,0 +1,34 @@
+<section data-section-id="{{ section.id }}" class="section newsletter">
+  <div class="newsletter__container {% include 'section-style' %}">
+
+  {% if section.settings.title != blank %}
+    <label for="Email" class="newsletter__heading type-heading-1">{{ section.settings.title | escape }}</label>
+  {% endif %}
+  {% if section.settings.subheading != blank %}
+    <div class="newsletter__subheading type-body-regular rte">{{ section.settings.subheading }}</div>
+  {% endif %}
+
+  {% form 'customer' %}
+    {{ form.errors | default_errors }}
+    {% if form.posted_successfully? %}
+      <p>{{ 'general.newsletter_form.confirmation' | t }}</p>
+    {% else %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="newsletter__input-container">
+        <input type="email"
+          class="input newsletter__input input-reset"
+          name="contact[email]"
+          id="Email"
+          value="{% if customer.email != blank %}{{ customer.email }}{% endif %}"
+          placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+          autocorrect="off"
+          autocapitalize="off">
+        <button type="submit" name="commit" id="Subscribe" class="newsletter__submit-button">
+          <span>{{ 'general.newsletter_form.submit' | t }} &rarr;</span>
+        </button>
+      </div>
+    {% endif %}
+  {% endform %}
+
+</div>
+</section>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="no-js supports-no-cookies" lang='{{ shop.locale }}'>
+  <head>
+    <meta name="google-site-verification" content="DxhZqCk5v8Ng0tbZoRf4z4V3nVIHc4Z-cLVrQoPHg8g" />
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <meta name='theme-color' content="{{ settings.color_accent }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel='canonical' href='{{ canonical_url }}'>
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {%- endif -%}
+
+    {% capture seo_title %}
+      {{ page_title }}
+      {% if current_tags %}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+      {% endif %}
+      {% if current_page != 1 %}
+        &ndash; {{ 'general.meta.page' | t: page: current_page }}
+      {% endif %}
+      {% unless page_title contains shop.name %}
+        &ndash; {{ shop.name }}
+      {% endunless %}
+    {% endcapture %}
+    <title>{{ seo_title }}</title>
+
+    {% include 'head-meta' %}
+
+    {% if template.directory == 'customers' %}
+      <script src='{{ 'shopify_common.js' | shopify_asset_url }}' defer='defer'></script>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@1"></script>
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', '');
+      cssVars();
+
+      window.theme = {
+        strings: {
+          name: {{ shop.name | json }},
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }},
+          quickCartCheckout: {{ 'layout.cart.checkout' | t | json }},
+          collection: {
+            filter: {{ 'collections.general.filter' | t | json }},
+            sort: {{ 'collections.general.sort' | t | json }},
+            apply: {{ 'collections.general.apply' | t | json }},
+            show: {{ 'collections.general.show' | t | json }},
+            manual: {{ 'collections.sort.manual' | t | json }},
+            price_ascending: {{ 'collections.sort.price_ascending' | t | json }},
+            price_descending: {{ 'collections.sort.price_descending' | t | json }},
+            title_ascending: {{ 'collections.sort.title_ascending' | t | json }},
+            title_descending: {{ 'collections.sort.title_descending' | t | json }},
+            created_ascending: {{ 'collections.sort.created_ascending' | t | json }},
+            created_descending: {{ 'collections.sort.created_descending' | t | json }},
+            best_selling: {{ 'collections.sort.best_selling' | t | json }},
+          },
+
+          cart: {
+            general: {
+              empty: {{ 'cart.general.empty' | t | json }}
+            }
+          },
+          general: {
+            menu: {
+              logout: {{ 'general.menu.logout' | t | json }},
+              login_register: {{ 'general.menu.login_register' | t | json }}
+            },
+            products: {
+              recently_viewed: {{ 'general.products.recently_viewed' | t | json }},
+              no_recently_viewed: {{ 'general.products.no_recently_viewed' | t | json }}
+            },
+            search: {
+              search: {{ 'general.search.search' | t | json }},
+              no_results: {{ 'general.search.no_results' | t | json }},
+              placeholder: {{ 'general.search.placeholder' | t | json }},
+              quick_search: {{ 'general.search.quick_search' | t | json }},
+              quick_search_results: {
+                one: {{ 'general.search.quick_search_results.one' | t | json }},
+                other: {{ 'general.search.quick_search_results.other' | t | json }}
+              },
+              submit: {{ 'general.search.submit' | t | json }}
+            }
+          },
+          products: {
+            product: {
+              view: {{ 'products.product.view' | t | json }}
+            }
+          },
+          layout: {
+            cart: {
+              title: {{ 'layout.cart.title' | t | json }}
+            }
+          }
+        },
+        moneyFormat: "{{ shop.money_format }}"
+      }
+
+      {% if template.directory == 'customers' %}
+        window.theme.allCountryOptionTags = {{ all_country_option_tags | json }};
+      {% endif %}
+    </script>
+
+    {% include 'css-variables' %}
+    {{ 'index.css' | asset_url | stylesheet_tag }}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class='{%- if settings.uppercase_headings -%}g-uppercase{%- endif -%}'>
+
+    <main role='main' id='root'>
+      {% section 'static-header' %}
+      {{ content_for_layout }}
+      {% section 'static-footer' %}
+    </main>
+
+    <div id='siteOverlay' class='site-overlay'></div>
+
+    {% include 'currencies' %}
+    <script src='{{ 'index.js' | asset_url }}' defer='defer'></script>
+  </body>
+</html>

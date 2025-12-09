@@ -1,0 +1,164 @@
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="main-care-guide-hub"
+  class="collection collection--care-guide-hub"
+>
+
+  <header role="banner" class="section">
+    <div class="section--standard flex flex-column">
+      <div class="collection__details">
+        <p class="type-heading-meta meta mt0 mb3">
+          {{ 'collections.general.name' | t }}
+        </p>
+        <h1 class="type-heading-1 mv3 ma0">{{ page.title }}</h1>
+        {% if page.content != blank %}
+          <div class="type-body-regular rte measure mb4">
+            {{ page.content }}
+          </div>
+        {% endif %}
+        
+        {% if section.settings.intro_text != blank %}
+          <div class="type-body-large rte measure mb0">
+            {{ section.settings.intro_text }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_page_image %}
+        {%- if section.settings.page_image != blank -%}
+          {%- assign page_image = section.settings.page_image -%}
+        {%- elsif page.metafields.custom.featured_image != blank -%}
+          {%- assign page_image = page.metafields.custom.featured_image -%}
+        {%- endif -%}
+        {% if page_image != blank %}
+          <div class="collection__image-wrapper">
+            {% include 'responsive-image' with
+              image: page_image,
+              max_width: 1200,
+              max_height: 800
+            %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="collections__list">
+      {% for block in section.blocks %}
+        {%- assign care_guide_page = pages[block.settings.page] -%}
+        {% if care_guide_page != blank %}
+          <div class="collections__collection-wrapper" {{ block.shopify_attributes }}>
+            <div class="collections__collection">
+              <a href="{{ care_guide_page.url }}" title="{{ care_guide_page.title }}">
+                {% if block.settings.image != blank %}
+                  {% include 'responsive-image' with
+                    image: block.settings.image,
+                    max_width: 480,
+                    max_height: 480
+                  %}
+                {% elsif care_guide_page.metafields.custom.featured_image != blank %}
+                  {% include 'responsive-image' with
+                    image: care_guide_page.metafields.custom.featured_image,
+                    max_width: 480,
+                    max_height: 480
+                  %}
+                {% else %}
+                  {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                  <div>
+                    {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+                  </div>
+                {% endif %}
+              </a>
+
+              <div class="collections__collection-meta">
+                <h2 class="type-heading-1 mt0">
+                  <a href="{{ care_guide_page.url }}" title="{{ care_guide_page.title }}">{{ care_guide_page.title }}</a>
+                </h2>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.blocks.size == 0 %}
+      {% include 'no-blocks' %}
+    {% endif %}
+  </div>
+
+</section>
+
+{% schema %}
+  {
+    "name": "Care Guide Hub",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Page Display"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_page_image",
+        "label": "Show page image",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "page_image",
+        "label": "Page image",
+        "info": "Primary image for the care guide hub page. This setting appears in Theme Customizer (Online Store > Themes > Customize). To add an image in the page editor, use the page metafield 'custom.featured_image' instead - it will appear in the page editor's right sidebar and will be used as a fallback if this section setting is not set."
+      },
+      {
+        "type": "richtext",
+        "id": "intro_text",
+        "label": "Introduction text",
+        "info": "Optional introductory text displayed below the page content"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "care_guide_link",
+        "name": "Care Guide Page",
+        "settings": [
+          {
+            "type": "page",
+            "id": "page",
+            "label": "Care guide page",
+            "info": "Select the care guide page to link to"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Card image",
+            "info": "Optional custom image for this care guide card. If left blank, the page's featured image metafield (custom.featured_image) will be used if available."
+          },
+          {
+            "type": "textarea",
+            "id": "description",
+            "label": "Custom description",
+            "info": "Optional custom description text for this care guide card. If left blank, the page's card_description metafield (custom.card_description) will be used if available, otherwise the page's excerpt or content will be used."
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Care Guide Hub",
+        "category": "Page",
+        "blocks": [
+          {
+            "type": "care_guide_link"
+          },
+          {
+            "type": "care_guide_link"
+          },
+          {
+            "type": "care_guide_link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+

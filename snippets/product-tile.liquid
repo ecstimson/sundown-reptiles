@@ -1,0 +1,61 @@
+<div class="w-100">
+{% if product.featured_image != blank %}
+  <a href="{{ product.url | within: collection }}">
+    <div class="relative">
+      <div {% unless product.available %} class="o-70" {% endunless %}>
+        {% include 'responsive-image' with
+          image: product.featured_image,
+          max_width: 700,
+          max_height: 800
+        %}
+      </div>
+
+      {% comment %} SALE BADGE {% endcomment %}
+      {% if product.compare_at_price > product.price %}
+        <div class="type-body-small lh-title absolute top-0 left-0 mt2 ml2 pv1 ph2 bg-sale white br2 shadow-1">
+          {{ 'products.product.on_sale' | t }}
+        </div>
+      {% endif %}
+
+      {% comment %} SOLD OUT BADGE {% endcomment %}
+      {% unless product.available %}
+        <div class="type-body-small lh-title absolute top-0 left-0 mt2 ml2 pv1 ph2 bg-white br2 shadow-1">
+          {{ 'products.product.sold_out' | t }}
+        </div>
+      {% endunless %}
+    </div>
+  </a>
+{% endif %}
+
+
+  <h2 class="type-body-regular mt3 mb1">
+    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+  </h2>
+  <p class="meta ma0">
+    {% if product.compare_at_price > product.price %}
+      <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+      <s>{{ product.compare_at_price | money }}</s>
+    {% endif %}
+
+
+    {% if product.compare_at_price > product.price %}
+
+      {% if product.price_varies %}
+        {%- assign sale_price = product.price | money -%}
+        {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+      {% else %}
+        <span class="sale">{{ product.price | money }}<span>
+      {% endif %}
+
+    {% else %}
+
+      {% if product.price_varies %}
+        {%- assign price = product.price | money -%}
+        {{ 'products.product.from_text_html' | t: price: price }}
+      {% else %}
+        {{ product.price | money }}
+      {% endif %}
+
+    {% endif %}
+  </p>
+</div>

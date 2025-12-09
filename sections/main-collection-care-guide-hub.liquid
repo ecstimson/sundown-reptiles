@@ -1,0 +1,143 @@
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="main-collection-care-guide-hub"
+  class="collection collection--care-guide-hub"
+>
+
+  <header role="banner" class="section">
+    <div class="section--standard flex flex-column">
+      <div class="collection__details">
+        <p class="type-heading-meta meta mt0 mb3">
+          {{ 'collections.general.name' | t }}
+        </p>
+        <h1 class="type-heading-1 mv3 ma0">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="type-body-regular rte measure mb4">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+        
+        {% if section.settings.intro_text != blank %}
+          <div class="type-body-large rte measure mb0">
+            {{ section.settings.intro_text }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_collection_image %}
+        {%- assign collection_image = collection.image | default: collection.products.first.featured_image -%}
+        {% if collection_image != blank %}
+          <div class="collection__image-wrapper">
+            {% include 'responsive-image' with
+              image: collection_image,
+              max_width: 1200,
+              max_height: 800
+            %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="collections__list">
+      {% for block in section.blocks %}
+        {%- assign sub_collection = collections[block.settings.collection] -%}
+        {% if sub_collection != blank %}
+          <div class="collections__collection-wrapper" {{ block.shopify_attributes }}>
+            <div class="collections__collection">
+              <a href="{{ sub_collection.url }}" title="{{ sub_collection.title }}">
+                {% if sub_collection.image != blank or sub_collection.products.first != blank %}
+                  {%- assign image_object = sub_collection.image | default: sub_collection.products.first.featured_image -%}
+                  {% include 'responsive-image' with
+                    image: image_object,
+                    max_width: 480,
+                    max_height: 480
+                  %}
+                {% else %}
+                  {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                  <div>
+                    {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+                  </div>
+                {% endif %}
+              </a>
+
+              <div class="collections__collection-meta">
+                <h2 class="type-heading-1 mt0">
+                  <a href="{{ sub_collection.url }}" title="{{ sub_collection.title }}">{{ sub_collection.title }}</a>
+                </h2>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if section.blocks.size == 0 %}
+      {% include 'no-blocks' %}
+    {% endif %}
+  </div>
+
+</section>
+
+{% schema %}
+  {
+    "name": "Care Guide Hub",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Collection Display"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "label": "Show collection image",
+        "default": true
+      },
+      {
+        "type": "richtext",
+        "id": "intro_text",
+        "label": "Introduction text",
+        "info": "Optional introductory text displayed below the collection description"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "sub_collection_link",
+        "name": "Sub-collection",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Care guide collection",
+            "info": "Select the care guide collection to link to"
+          },
+          {
+            "type": "textarea",
+            "id": "description",
+            "label": "Custom description",
+            "info": "Optional custom description text for this care guide card. If left blank, the collection's description will be used."
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Care Guide Hub",
+        "category": "Collection",
+        "blocks": [
+          {
+            "type": "sub_collection_link"
+          },
+          {
+            "type": "sub_collection_link"
+          },
+          {
+            "type": "sub_collection_link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+

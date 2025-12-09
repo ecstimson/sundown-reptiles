@@ -1,0 +1,47 @@
+{%- assign photo_count = section.settings.per_row | times: section.settings.rows -%}
+
+<section
+  data-section-id="{{ section.id }}" 
+  data-section-type="{{ type }}"
+  class="instagram section"
+>
+
+  <div class="instagram__wrapper instagram__wrapper--{{ section.settings.alignment }} {% include 'section-style' %}">
+    <div class="instagram__side">
+      <h2 class="type-heading-1 measure-narrow">{{ section.settings.title }}</h2>
+      <a href="#" class="accent-link" data-instagram-link>{{ section.settings.link_text }} &rarr;</a>
+    </div>
+
+    <div class="instagram__photos" data-instagram-content data-slider>
+      {%- if section.settings.instagram_token != blank -%}
+        {% for i in (1..photo_count) %}
+          <figure
+            data-instagram-photo
+            data-instagram-photo-placeholder>
+              {{ 'image' | placeholder_svg_tag: 'placeholder-image' }}
+          </figure>
+        {% endfor %}
+      {%- else -%}
+        {% for i in (1..photo_count) %}
+          <figure class="instagram__tile" data-instagram-photo>
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </figure>
+        {% endfor %}
+      {%- endif -%}
+    </div>
+
+  </div>
+
+  <script type="application/json" data-settings-data>
+    {
+      "photo_count": {{ photo_count }},
+      "instagram_token": {{ section.settings.instagram_token | escape | json }}
+    }
+  </script>
+</section>
+
+<style>
+#shopify-section-{{section.id}} .instagram__tile {
+  width: calc(100%/{{ section.settings.per_row }});
+}
+</style>

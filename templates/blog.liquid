@@ -1,0 +1,70 @@
+{% paginate blog.articles by 6 %}
+<div class="blog__heading">
+  {%- assign blog_title = blog.title -%}
+
+  {% if current_tags %}
+    {% capture blog_title %}{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}{% endcapture %}
+  {% endif %}
+
+  <div class="flex-ns justify-between-ns items-center-ns mt4 mb4 mb3-ns tc tl-ns">
+    <h2 class="dn-ns page-header__crumbs type-heading-meta mb2"><a href="/" class="color-inherit">{{ 'general.meta.home' | t }}</a> / {{ blog.title }}</h2>
+    <h1 class="ma0 type-heading-1">{{ blog_title }}</h1>
+    <a href="/blogs/{{ blog.handle }}.atom" class="blog__rss underline dn di-ns">{{ 'general.meta.rss' | t }}</a>
+  </div>
+
+</div>
+
+<div class="blog__container">
+  {% comment %}
+
+  Article Previews
+  ====================
+  {% endcomment %}
+
+  <section class="blog__articles">
+    {% for article in blog.articles %}
+    <div class="pa1 w-100 pa2-ns w-50-m w-third-l">
+      <article class="blog__article">
+        {% if article.image %}
+          <a href="{{ article.url }}">
+            <div
+              class="lazyload"
+              style="padding-top: 100%; background-size: cover;"
+              data-bgset="{% include 'responsive-bg-image', image: article.image %}"
+              role="img"
+              aria-label="{{ article.image.alt }}"
+            ></div>
+          </a>
+        {% endif %}
+
+        <div class="blog__article-content">
+
+          <div>
+            <h3 class="blog__article-heading type-heading-2">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h3>
+
+            <div class="blog__article-excerpt type-body-small">{{ article.excerpt_or_content | strip_html | truncate: 200 }}</div>
+          </div>
+
+          {% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+          <div class="type-heading-meta meta">{{ date }}</div>
+        </div>
+
+      </article>
+    </div>
+    {% endfor %}
+  </section>
+
+  <div class="blog__pagination">
+    {% if paginate.pages > 1 %}
+      {% include 'pagination' with type: 'general.pagination.blog_posts', of: paginate.page_size, total: paginate.items %}
+    {% else %}
+      {% include 'pagination' with type: 'general.pagination.blog_posts', of: blog.articles_count, total: blog.articles_count %}
+    {% endif %}
+  </div>
+
+</div>
+{% endpaginate %}
+
+{% section 'static-recently-viewed' %}

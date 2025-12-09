@@ -1,0 +1,190 @@
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="main-collection-gecko-cg-cards"
+  class="collection collection--gecko-cg-cards"
+>
+
+  <script type="application/json" data-tags>
+    {% if collection.all_tags.size > 0 %}
+      [
+        {%- for tag in collection.all_tags -%}
+          "{{ tag }}"
+          {%- if forloop.last == false -%}
+            ,
+          {%- endif -%}
+        {%- endfor -%}
+      ]
+    {% else %}
+      []
+    {% endif %}
+  </script>
+
+{% assign paginate_by = section.settings.products_per_page %}
+{% if template contains 'view-12' %}
+  {% assign paginate_by = 12 %}
+{% elsif template contains 'view-24' %}
+  {% assign paginate_by = 24 %}
+{% elsif template contains 'view-36' %}
+  {% assign paginate_by = 36 %}
+{% endif %}
+
+{% paginate collection.products by paginate_by %}
+
+  <header role="banner" class="section">
+    <div class="section--standard flex flex-column">
+      <div
+        class="
+          collection__details
+          {% if section.settings.show_collection_image and collection.image == blank %}collection__details--no-image{% endif %}
+        "
+      >
+        <p class="type-heading-meta meta mt0 mb3">
+          {{ 'collections.general.name' | t }}
+        </p>
+        <h1 class="type-heading-1 mv3 ma0">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="type-body-regular rte measure mb4">
+            {{ collection.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_collection_image and collection.image != blank %}
+        <div class="collection__image-wrapper">
+          {% include 'responsive-image' with
+            image: collection.image,
+            max_width: 1200,
+            max_height: 800
+          %}
+        </div>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if section.settings.seo_content != blank %}
+    <div class="section">
+      <div class="section--standard">
+        <div class="type-body-large rte measure-wide center mb6">
+          {{ section.settings.seo_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="collection__container">
+    {%- comment -%}Mount React{%- endcomment -%}
+    <div id="filters"></div>
+
+    <div class="collection__products collection__products--{{ section.settings.grid_columns }}">
+      {% for product in collection.products %}
+        <div class="w-50 ph1 w-third-m ph2-ns w-25-l mb4">
+          {% include 'product-tile', product: product %}
+        </div>
+
+      {% else %}
+        {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+          {% for i in (1..8) %}
+            <a href="#">
+              {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+              {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+            </a>
+
+            <p>
+              <a href="#">{{ 'homepage.onboarding.product_title' | t }}</a>
+            </p>
+
+            <p>
+              {{ 1999 | money }}
+            </p>
+          {% endfor %}
+        {% else %}
+          <p class="db tc w-100 mv6">{{ 'collections.general.no_matches' | t }}</p>
+        {% endif %}
+
+      {% endfor %}
+    </div>
+  </div>
+
+
+  <div class="section">
+    <hr class="mv3 b--solid b--default bb" style="border-top: none;" />
+    {% if paginate.pages > 1 %}
+      {% include 'pagination' with type: 'general.pagination.products', total: paginate.items, of: paginate.page_size %}
+    {% else %}
+      {% include 'pagination' with type: 'general.pagination.products', total: collection.products_count, of: collection.products_count %}
+    {% endif %}
+  </div>
+
+
+{% endpaginate %}
+</section>
+
+{% schema %}
+  {
+    "name": "Gecko CG Cards",
+    "settings": [
+      {
+        "type": "header",
+        "content": "SEO Content"
+      },
+      {
+        "type": "richtext",
+        "id": "seo_content",
+        "label": "Rich text content",
+        "info": "Large rich text area displayed above the product grid. Use this for subcategory-specific care guides, detailed descriptions, and SEO content."
+      },
+      {
+        "type": "header",
+        "content": "Collection Display"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_image",
+        "label": "Show collection image",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Product Grid"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "label": "Products per page",
+        "min": 12,
+        "max": 48,
+        "step": 12,
+        "default": 12,
+        "info": "Note: Template variants (view-12, view-24, view-36) will override this setting"
+      },
+      {
+        "type": "select",
+        "id": "grid_columns",
+        "label": "Grid columns (desktop)",
+        "options": [
+          {
+            "value": "2",
+            "label": "2 columns"
+          },
+          {
+            "value": "3",
+            "label": "3 columns"
+          },
+          {
+            "value": "4",
+            "label": "4 columns"
+          }
+        ],
+        "default": "4",
+        "info": "Number of product columns on desktop screens"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Gecko CG Cards",
+        "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}
+

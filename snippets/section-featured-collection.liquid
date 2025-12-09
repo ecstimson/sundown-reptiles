@@ -1,0 +1,54 @@
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="{{ type }}"
+  class="section"
+>
+{% assign alignment = section.settings.heading_alignment %}
+<div class="featured-collection featured-collection--{{ alignment }} {% include 'section-style' %}">
+
+  {%- assign collection = collections[section.settings.collection] -%}
+
+  <div class="featured-collection__details">
+    {% if section.settings.title != blank %}
+      <h2 class="type-heading-1 measure-narrow">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% if section.settings.collection_subheading != blank %}
+      <p class="type-body-regular featured-collection__subheading">{{ section.settings.collection_subheading }}</p>
+    {% endif %}
+
+    {% if section.settings.link_text != blank %}
+      <a href="{{ collection.url }}" class="accent-link">{{ section.settings.link_text }} &rarr;</a>
+    {% endif %}
+  </div>
+
+  {%- assign max_products = section.settings.products_per_row | times: section.settings.rows -%}
+
+  <div class="featured-collection__content" data-slider>
+
+    {% for product in collection.products limit: max_products %}
+
+      <div class="featured-collection__item featured-collection__item--{{ section.settings.products_per_row }}">
+        {% include 'product-tile' with product.product %}
+      </div>
+
+    {% else %}
+
+      {% for i in (1..max_products) %}
+        <div class="featured-collection__item featured-collection__item--{{ section.settings.products_per_row }}">
+          <div class="w-100">
+            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+
+            <h2 class="type-body-regular mt3 mb1">
+              {{ 'homepage.onboarding.product_title' | t }}
+            </h2>
+            <p class="meta ma0">{{ 1999 | money }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+
+  </div>
+</div>
+</section>

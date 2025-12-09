@@ -1,0 +1,11 @@
+<div class="page-header">
+  <p class="page-header__crumbs type-heading-meta">
+    {{ 'general.meta.home' | t }}
+    /
+    {{ page.title }}
+  </p>
+  <h1 class="page-header__title type-heading-display">{{ title }}</h1>
+  {% if subheading %}
+    <h2 class="page-header__subheading type-body-extra-large">{{ subheading }}</h2>
+  {% endif %}
+</div>

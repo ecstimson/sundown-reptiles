@@ -1,0 +1,498 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Context",
+    "theme_version": "1.0.1",
+    "theme_author": "Fluorescent Design Inc.",
+    "theme_documentation_url": "https://help.fluorescent.co/context",
+    "theme_support_url": "https://help.fluorescent.co/context"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "General"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent",
+        "default": "#a09b9a"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_meta_text",
+        "label": "Meta Text",
+        "default": "#757575"
+      },
+      {
+        "type": "color",
+        "id": "color_button_text",
+        "label": "Button text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Border",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "color",
+        "id": "color_input",
+        "label": "Input",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_input_text",
+        "label": "Input text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary_button",
+        "label": "Secondary button",
+        "default": "#e4dfde"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary_button_text",
+        "label": "Secondary button text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_sale_badge",
+        "label": "Sale badge",
+        "default": "#b6534c"
+      },
+      {
+        "type": "color",
+        "id": "color_success_message",
+        "label": "Success message",
+        "default": "#82b875"
+      },
+      {
+        "type": "color",
+        "id": "color_error_message",
+        "label": "Error message",
+        "default": "#b6534c"
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "color",
+        "id": "color_header_text",
+        "label": "Text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_header_bg",
+        "label": "Background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_header_border",
+        "label": "Border",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "color",
+        "id": "color_header_icon",
+        "label": "Icon",
+        "default": "#9a9a9a"
+      },
+      {
+        "type": "header",
+        "content": "Contrast"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_text",
+        "label": "Text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_meta_text",
+        "label": "Meta text",
+        "default": "#707070"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_bg",
+        "label": "Background",
+        "default": "#f9f9f9"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_border",
+        "label": "Border",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_input",
+        "label": "Input",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_contrast_input_text",
+        "label": "Input text",
+        "default": "#363636"
+      },
+      {
+        "type": "header",
+        "content": "Navigation"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_text",
+        "label": "Text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_meta_text",
+        "label": "Meta text",
+        "default": "#757575"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_bg",
+        "label": "Background",
+        "default": "#f9f9f9"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_border",
+        "label": "Border",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "color",
+        "id": "color_navigation_feature",
+        "label": "Feature",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Drawers"
+      },
+      {
+        "type": "color",
+        "id": "color_drawer_text",
+        "label": "Text",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_drawer_meta_text",
+        "label": "Meta text",
+        "default": "#8a8a8a"
+      },
+      {
+        "type": "color",
+        "id": "color_drawer_bg",
+        "label": "Background",
+        "default": "#212121"
+      },
+      {
+        "type": "color",
+        "id": "color_drawer_border",
+        "label": "Border",
+        "default": "#434343"
+      },
+      {
+        "type": "header",
+        "content": "Footer"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_text",
+        "label": "Text",
+        "default": "#363636"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_meta_text",
+        "label": "Meta Text",
+        "default": "#707070"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_bg",
+        "label": "Background",
+        "default": "#f9f9f9"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_border",
+        "label": "Border",
+        "default": "#e2e2e2"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_input",
+        "label": "Input",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_footer_input_text",
+        "label": "Input text",
+        "default": "#363636"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "default": "electra_n4",
+        "label": "Headings"
+      },
+      {
+        "type": "range",
+        "id": "size_heading",
+        "min": 14,
+        "max": 22,
+        "step": 1,
+        "unit": "px",
+        "label": "Heading size",
+        "default": 16
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase_headings",
+        "label": "Display headings in uppercase",
+        "default": false
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "default": "assistant_n4",
+        "label": "Body text"
+      },
+      {
+        "type": "range",
+        "id": "size_body",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Body size",
+        "default": 16
+      },
+      {
+        "type": "header",
+        "content": "Header"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_logo",
+        "label": "Logo font",
+        "default": "electra_n7"
+      },
+      {
+        "type": "range",
+        "id": "font_logo_size",
+        "min": 16,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Logo font size",
+        "default": 24
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social sharing image"
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Image",
+        "info": "Shown when sharing a link on social media. [Learn more](https://help.shopify.com/manual/using-themes/troubleshooting/showing-social-media-thumbnail-images/) about image thumbnails."
+      },
+      {
+        "type": "header",
+        "content": "Social sharing options"
+      },
+      {
+        "type": "checkbox",
+        "id": "social_sharing_blog",
+        "label": "Enable sharing for blog articles",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_facebook",
+        "label": "Share on Facebook",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_twitter",
+        "label": "Tweet on Twitter",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "share_pinterest",
+        "label": "Pin on Pinterest",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Sharing links"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter link",
+        "info": "https://twitter.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook link",
+        "info": "https://facebook.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest link",
+        "info": "https://pinterest.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram link",
+        "info": "https://instagram.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat link",
+        "info": "https://snapchat.com/add/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr link",
+        "info": "https://shopify.tumblr.com"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "Youtube link",
+        "info": "https://youtube.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo link",
+        "info": "https://vimeo.com/shopify"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable cart notes",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "quick_cart_note",
+        "label": "Quick cart note",
+        "default": "Your subtotal today is [subtotal]. Shipping and taxes will calculated at checkout."
+      }
+    ]
+  },
+  {
+    "name": "Currency",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "To offer multiple currencies on your online store, you must first [edit your store's currency formatting](https://help.shopify.com/manual/using-themes/change-the-layout/help-script-find-money-formats)."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_multiple_currencies",
+        "label": "Enable currency conversion",
+        "default": false,
+        "info": "Even though prices are displayed in different currencies, orders will still be processed in your store's currency."
+      },
+      {
+        "type": "select",
+        "id": "currency_format",
+        "label": "Format",
+        "options": [
+          {
+            "value": "money_format",
+            "label": "Without currency ($10.00)"
+          },
+          {
+            "value": "money_with_currency_format",
+            "label": "With currency ($10.00 CAD)"
+          }
+        ],
+        "default": "money_with_currency_format"
+      },
+      {
+        "type": "text",
+        "id": "supported_currencies",
+        "label": "Supported currencies",
+        "default": "INR GBP CAD USD AUD EUR JPY",
+        "info": "Use the country's ISO [currency code](http://www.xe.com/iso4217.php). Separate your currency codes with a space."
+      },
+      {
+        "type": "text",
+        "id": "default_currency",
+        "label": "Default currency",
+        "default": "USD"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "Will be scaled down to 32 x 32px"
+      }
+    ]
+  }
+]

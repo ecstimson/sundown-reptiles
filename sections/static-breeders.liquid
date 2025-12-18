@@ -1,0 +1,262 @@
+{% comment %} 
+  Native Modal Lightbox - Whole-Card Trigger with Hover Effects
+{% endcomment %}
+
+<section
+  data-section-id="{{ section.id }}"
+  data-section-type="static-breeders"
+  class="breeders section"
+>
+  {% include 'page-header' with title: page.title %}
+
+  {% comment %} Gender Toggle Buttons {% endcomment %}
+  <div class="breeders__toggle-wrapper section">
+    <div class="breeders__toggles flex justify-center items-center">
+      <button 
+        class="breeders__toggle breeders__toggle--male bttn bttn--secondary js-breeder-toggle active" 
+        data-gender="male"
+        type="button"
+      >
+        Male
+      </button>
+      <button 
+        class="breeders__toggle breeders__toggle--female bttn bttn--secondary js-breeder-toggle" 
+        data-gender="female"
+        type="button"
+      >
+        Female
+      </button>
+    </div>
+  </div>
+
+  {% comment %} Animal Cards Grid {% endcomment %}
+  <div class="section">
+    <div class="collections__list">
+      {% for block in section.blocks %}
+        {% if block.type == 'animal' %}
+          <div 
+            class="collections__collection-wrapper native-lightbox-trigger"
+            data-gender="{{ block.settings.gender }}"
+            data-href="{{ block.settings.image | img_url: 'master' }}" 
+            data-title="{{ block.settings.name }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="collections__collection">
+              {% if block.settings.image != blank %}
+                <div class="image-container">
+                  {% include 'responsive-image' with
+                    image: block.settings.image,
+                    max_width: 480,
+                    max_height: 480
+                  %}
+                </div>
+              {% else %}
+                <div class="placeholder-image">
+                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
+                </div>
+              {% endif %}
+
+              <div class="collections__collection-meta">
+                <h2 class="type-heading-1 mt0">
+                   {{ block.settings.name }}
+                </h2>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% comment %} Native Modal Structure {% endcomment %}
+<dialog id="animal-modal" class="native-modal">
+  <div class="modal-content-wrapper">
+    <form method="dialog">
+      <button class="modal-close-btn" aria-label="Close">×</button>
+    </form>
+    <img id="modal-image" src="" alt="">
+    <h3 id="modal-caption" class="type-heading-2"></h3>
+  </div>
+</dialog>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const section = document.querySelector('#shopify-section-{{ section.id }}');
+  const modal = document.getElementById('animal-modal');
+  const modalImg = document.getElementById('modal-image');
+  const modalCap = document.getElementById('modal-caption');
+  const toggles = section.querySelectorAll('.js-breeder-toggle');
+  const cardWrappers = section.querySelectorAll('.collections__collection-wrapper');
+
+  // 1. Gender Filtering
+  function filterByGender(gender) {
+    cardWrappers.forEach(wrapper => {
+      wrapper.style.display = (wrapper.getAttribute('data-gender') === gender) ? '' : 'none';
+    });
+    toggles.forEach(toggle => {
+      toggle.classList.toggle('active', toggle.getAttribute('data-gender') === gender);
+    });
+  }
+
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      filterByGender(this.getAttribute('data-gender'));
+    });
+  });
+
+  // 2. Lightbox Logic (Triggered by any part of the card)
+  section.addEventListener('click', function(e) {
+    const card = e.target.closest('.native-lightbox-trigger');
+    if (!card) return;
+    
+    e.preventDefault();
+    modalImg.src = card.getAttribute('data-href');
+    modalCap.textContent = card.getAttribute('data-title');
+    
+    modal.showModal(); 
+  });
+
+  // Close when clicking the backdrop
+  modal.addEventListener('click', (e) => {
+    const dialogDimensions = modal.getBoundingClientRect();
+    if (
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom
+    ) {
+      modal.close();
+    }
+  });
+
+  filterByGender('male');
+});
+</script>
+
+<style>
+/* Layout styling */
+.breeders__toggle-wrapper { margin-top: 2rem; margin-bottom: 2rem; }
+.breeders__toggles { gap: 1rem; }
+.breeders__toggle { min-width: 120px; }
+.breeders__toggle.active { background-color: var(--color-accent); color: var(--color-button-text); }
+
+@media screen and (min-width: 48em) {
+  .breeders__toggle-wrapper { margin-top: 3rem; margin-bottom: 3rem; }
+}
+
+/* Card Hover Effects */
+.native-lightbox-trigger {
+  cursor: pointer;
+}
+
+.native-lightbox-trigger .collections__collection {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 4px;
+}
+
+.native-lightbox-trigger:hover .collections__collection {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Native Modal Styling */
+.native-modal {
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: 95vw;
+  max-height: 95vh;
+  overflow: visible;
+}
+
+.native-modal::backdrop {
+  background: rgba(0, 0, 0, 0.4); 
+}
+
+.modal-content-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.native-modal img {
+  max-width: 100%;
+  max-height: 80vh;
+  display: block;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  background: #fff;
+  padding: 5px;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: #fff;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#modal-caption {
+  color: #fff;
+  margin-top: 1rem;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+</style>
+
+{% schema %}
+{
+  "name": "Breeders",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "animal",
+      "name": "Animal",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Animal Name"
+        },
+        {
+          "type": "select",
+          "id": "gender",
+          "label": "Gender",
+          "options": [
+            { "value": "male", "label": "Male" },
+            { "value": "female", "label": "Female" }
+          ],
+          "default": "male"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Breeders",
+      "blocks": [
+        { "type": "animal" },
+        { "type": "animal" }
+      ]
+    }
+  ]
+}
+{% endschema %}
